@@ -9,7 +9,9 @@
     "lint": "next lint",
     "generate": "drizzle-kit generate",
     "migrate:up": "node ./src/db/migrate.js",
-    "seed": "tsx ./src/db/seed/advocates.ts"
+    "seed": "tsx ./src/db/seed/advocates.ts",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "drizzle-orm": "^0.32.1",
