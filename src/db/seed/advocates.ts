@@ -1,4 +1,4 @@
-import db from "..";
+import getDb from "..";
 import { advocates } from "../schema";
 
 const specialties = [
@@ -30,11 +30,13 @@ const specialties = [
   "Domestic abuse",
 ];
 
-const randomSpecialty = () => {
-  const random1 = Math.floor(Math.random() * 24);
-  const random2 = Math.floor(Math.random() * (24 - random1)) + random1 + 1;
+const randomSpecialty = (): [number, number] => {
+  const maxIndex = specialties.length - 1;
+  const random1 = Math.floor(Math.random() * maxIndex);
+  const random2 =
+    Math.floor(Math.random() * (maxIndex - random1)) + random1 + 1;
 
-  return [random1, random2];
+  return [random1, Math.min(random2, specialties.length)];
 };
 
 const advocateData = [
@@ -174,5 +176,24 @@ const advocateData = [
     phoneNumber: 5559872345,
   },
 ];
+
+// Main execution for seeding
+async function seedDatabase() {
+  try {
+    console.log("Seeding database with advocate data...");
+    const db = getDb();
+    const records = await db.insert(advocates).values(advocateData).returning();
+    console.log(`Successfully seeded ${records.length} advocates`);
+    process.exit(0);
+  } catch (error) {
+    console.error("Error seeding database:", error);
+    process.exit(1);
+  }
+}
+
+// Run seeding if this file is executed directly
+if (require.main === module) {
+  seedDatabase();
+}
 
 export { advocateData };
